@@ -4,13 +4,13 @@ import {
   LoginRequestDto,
   RegisterRequestDto,
   ValidateRequestDto,
-} from './auth.dto';
+} from './dto/auth.dto';
 import {
   AUTH_SERVICE_NAME,
   RegisterResponse,
   LoginResponse,
   ValidateResponse,
-} from './auth.pb';
+} from './pb/auth.pb';
 import { AuthService } from './auth.service';
 
 @Controller()
