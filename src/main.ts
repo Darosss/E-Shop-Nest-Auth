@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { RpcException, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './auth/filter/http-exception.filter';
 import { protobufPackage } from './auth/pb/auth.pb';
 import { status } from '@grpc/grpc-js';
 
