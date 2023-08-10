@@ -10,6 +10,7 @@ import {
 import { Auth } from './entities/auth.entity';
 import {
   LoginResponse,
+  ProfileResponse,
   RegisterResponse,
   ValidateResponse,
 } from './pb/auth.pb';
@@ -81,7 +82,7 @@ export class AuthService {
     token,
   }: ValidateRequestDto): Promise<ValidateResponse> {
     const decoded: Auth = await this.jwtService.verify(token);
-
+    //TODO: add new rpc exceptions here
     if (!decoded) {
       return {
         status: HttpStatus.FORBIDDEN,
@@ -91,7 +92,7 @@ export class AuthService {
     }
 
     const auth: Auth = await this.jwtService.validateUser(decoded);
-
+    //TODO: add new rpc exceptions here
     if (!auth) {
       return {
         status: HttpStatus.CONFLICT,
@@ -100,5 +101,14 @@ export class AuthService {
       };
     }
     return { status: HttpStatus.OK, error: null, userId: decoded.id };
+  }
+  public async profile(userId: number): Promise<ProfileResponse> {
+    const profile = await this.repository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    return { status: HttpStatus.OK, error: null, data: profile };
   }
 }
