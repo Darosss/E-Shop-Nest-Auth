@@ -10,6 +10,8 @@ import {
   RegisterResponse,
   LoginResponse,
   ValidateResponse,
+  ProfileResponse,
+  ProfileRequest,
 } from './pb/auth.pb';
 import { AuthService } from './auth.service';
 
@@ -31,5 +33,10 @@ export class AuthController {
   @GrpcMethod(AUTH_SERVICE_NAME, 'Validate')
   private validate(payload: ValidateRequestDto): Promise<ValidateResponse> {
     return this.service.validate(payload);
+  }
+
+  @GrpcMethod(AUTH_SERVICE_NAME, 'Profile')
+  private profile({ userId }: ProfileRequest): Promise<ProfileResponse> {
+    return this.service.profile(userId);
   }
 }
