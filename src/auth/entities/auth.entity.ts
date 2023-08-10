@@ -12,4 +12,13 @@ export class Auth extends BaseEntity {
   @Exclude()
   @Column({ type: 'varchar' })
   public password!: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  public firstname?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  public surname?: string;
+
+  @Column({ type: 'integer', nullable: true })
+  public phone?: number;
 }
