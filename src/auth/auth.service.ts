@@ -13,6 +13,8 @@ import {
   RegisterResponse,
   ValidateResponse,
 } from './pb/auth.pb';
+import { RpcException } from '@nestjs/microservices';
+import { status } from '@grpc/grpc-js';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +31,10 @@ export class AuthService {
     let auth: Auth = await this.repository.findOne({ where: { email } });
 
     if (auth) {
-      return { status: HttpStatus.CONFLICT, error: ['E-Mail already exists'] };
+      throw new RpcException({
+        code: status.ALREADY_EXISTS,
+        message: 'E-mail already exist',
+      });
     }
 
     auth = new Auth();
@@ -49,11 +54,10 @@ export class AuthService {
     const auth: Auth = await this.repository.findOne({ where: { email } });
 
     if (!auth) {
-      return {
-        status: HttpStatus.NOT_FOUND,
-        error: ['E-Mail not found'],
-        token: null,
-      };
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'Account with provided e-mail does not exist',
+      });
     }
 
     const isPasswordValid: boolean = this.jwtService.isPasswordValid(
@@ -62,11 +66,10 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      return {
-        status: HttpStatus.NOT_FOUND,
-        error: ['Password wrong'],
-        token: null,
-      };
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'Password wrong',
+      });
     }
 
     const token: string = this.jwtService.generateToken(auth);
